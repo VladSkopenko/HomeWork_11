@@ -36,6 +36,14 @@ async def update_contact(contact_id: int, body: ContactModel, db: Session) -> Co
     return contact
 
 
+async def delete_contact(contact_id: int, db: Session) -> None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        db.delete(contact)
+        db.commit()
+    return contact
+
+
 
 
 
