@@ -47,3 +47,9 @@ async def delete_contact(contact_id: int, db: Session = Depends(get_db)):
 async def get_contacts_by_id(contact_id: int, db: Session = Depends(get_db)):
     contact = await repository_contacts.get_contacts_by_id(contact_id, db)
     return contact
+
+
+# @router.get("/upcoming-birthdays", response_model=list[ContactResponse])
+# async def upcoming_birthdays(db: Session = Depends(get_db)):
+#     contacts = repository_contacts.upcoming_birthdays(db)
+#     return contacts

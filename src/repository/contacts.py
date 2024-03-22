@@ -1,9 +1,10 @@
 from typing import List, Type
 
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_,  and_
 from src.database.models import Contact
 from src.schemas import ContactModel, ContactResponse
+from datetime import date, timedelta
 
 
 async def get_contacts(skip: int, limit: int, db: Session) -> list[Type[Contact]]:
@@ -56,5 +57,17 @@ async def search_contacts(query: str, db: Session) -> list[Type[Contact]]:
             Contact.last_name.ilike(f"%{query}%"),
             Contact.email.ilike(f"%{query}%"),
         )
+    ).all()
+    return contacts
+
+
+async def upcoming_birthdays(db: Session) -> list[Type[Contact]]:
+    current_date = date.today()
+    next_week = current_date + timedelta(days=7)
+    contacts = db.query(Contact).filter(
+        (Contact.birthday.month >= current_date.month) &
+        (Contact.birthday.day >= current_date.day) |
+        (Contact.birthday.month <= next_week.month) &
+        (Contact.birthday.day <= next_week.day)
     ).all()
     return contacts
