@@ -21,3 +21,21 @@ async def create_contact(body: ContactModel, db: Session) -> Contact:
     db.commit()
     db.refresh(contact)
     return contact
+
+
+async def update_contact(contact_id: int, body: ContactModel, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    if contact:
+        contact.name = body.name
+        contact.last_name = body.last_name
+        contact.email = body.email
+        contact.phone = body.phone
+        contact.birthday = body.birthday
+        contact.description = body.description
+        db.commit()
+    return contact
+
+
+
+
+
