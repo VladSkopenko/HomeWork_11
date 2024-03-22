@@ -14,3 +14,8 @@ router = APIRouter(prefix='/notes', tags=["notes"])
 async def read_notes(skip: int = 0, limit: int = 5, db: Session = Depends(get_db)):
     contacts = await repository_notes.get_contacts(skip, limit, db)
     return contacts
+
+
+@router.post("/", response_model=ContactResponse)
+async def create_note(body: ContactModel, db: Session = Depends(get_db)):
+    return await repository_notes.create_contact(body, db)
