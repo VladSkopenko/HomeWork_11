@@ -7,7 +7,7 @@ from src.database.db import get_db
 from src.schemas import ContactModel, ContactResponse
 from src.repository import contacts as repository_contacts
 
-router = APIRouter(prefix='/notes', tags=["notes"])
+router = APIRouter(prefix='/contacts', tags=["contacts"])
 
 
 @router.get("/", response_model=List[ContactResponse])
@@ -34,4 +34,10 @@ async def delete_contact(contact_id: int, db: Session = Depends(get_db)):
     contact = await repository_contacts.delete_contact(contact_id, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Note not found")
+    return contact
+
+
+@router.get("/{contact_id}", response_model=ContactModel)
+async def get_contacts_by_id(contact_id: int, db: Session = Depends(get_db)):
+    contact = await repository_contacts.get_contacts_by_id(contact_id, db)
     return contact

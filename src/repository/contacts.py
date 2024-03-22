@@ -44,6 +44,6 @@ async def delete_contact(contact_id: int, db: Session) -> None:
     return contact
 
 
-
-
-
+async def get_contacts_by_id(contact_id: int, db: Session) -> Contact | None:
+    contact = db.query(Contact).filter(Contact.id == contact_id).first()
+    return contact
