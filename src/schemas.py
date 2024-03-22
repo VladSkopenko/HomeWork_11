@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 class ContactModel(BaseModel):
@@ -16,4 +16,3 @@ class ContactResponse(ContactModel):
 
     class Config:
         from_attributes = True
-

@@ -1,7 +1,7 @@
 from typing import List, Type
 
 from sqlalchemy.orm import Session
-
+from sqlalchemy import or_
 from src.database.models import Contact
 from src.schemas import ContactModel, ContactResponse
 
@@ -47,3 +47,14 @@ async def delete_contact(contact_id: int, db: Session) -> None:
 async def get_contacts_by_id(contact_id: int, db: Session) -> Contact | None:
     contact = db.query(Contact).filter(Contact.id == contact_id).first()
     return contact
+
+
+async def search_contacts(query: str, db: Session) -> list[Type[Contact]]:
+    contacts = db.query(Contact).filter(
+        or_(
+            Contact.name.ilike(f"%{query}%"),
+            Contact.last_name.ilike(f"%{query}%"),
+            Contact.email.ilike(f"%{query}%"),
+        )
+    ).all()
+    return contacts
