@@ -49,7 +49,6 @@ async def get_contacts_by_id(contact_id: int, db: Session = Depends(get_db)):
     return contact
 
 
-# @router.get("/upcoming-birthdays", response_model=list[ContactResponse])
-# async def upcoming_birthdays(db: Session = Depends(get_db)):
-#     contacts = repository_contacts.upcoming_birthdays(db)
-#     return contacts
+@router.get("/contacts/upcoming_birthdays/", response_model=List[ContactModel])
+def get_upcoming_birthdays_list(db: Session = Depends(get_db)):
+    return repository_contacts.get_upcoming_birthdays(db=db)
