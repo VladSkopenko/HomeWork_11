@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, ForeignKey, func, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
+from datetime import date
 Base = declarative_base()
 
 
@@ -14,6 +14,8 @@ class Contact(Base):
     phone = Column(String(10), nullable=True)
     birthday = Column(Date, nullable=False)
     description = Column(String(300), nullable=True)
+    created_at: Mapped[date] = mapped_column("created_at", DateTime, default=func.now(), nullable=True)
+    updated_at: Mapped[date] = mapped_column("updated_at", DateTime, default=func.now(), onupdate=func.now())
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user_id"), nullable=True)
     user: Mapped["User"] = relationship("User", backref="contacts", lazy="joined")
 
