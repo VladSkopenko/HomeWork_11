@@ -1,9 +1,9 @@
-from typing import List, Type
+from typing import Type
 
 from sqlalchemy.orm import Session
 from src.database.models import Contact
 from src.schemas import ContactModel
-from sqlalchemy import or_, func
+from sqlalchemy import or_, func, select
 
 from datetime import datetime, timedelta
 
@@ -46,9 +46,10 @@ async def delete_contact(contact_id: int, db: Session) -> None:
     return contact
 
 
-async def get_contacts_by_id(contact_id: int, db: Session) -> Contact | None:
-    contact = db.query(Contact).filter(Contact.id == contact_id).first()
-    return contact
+async def get_contact(id: int, db: Session):
+    query = select(Contact).filter_by(id=id)
+    contact = db.execute(query)
+    return contact.scalar_one_or_none()
 
 
 async def search_contacts(query: str, db: Session) -> list[Type[Contact]]:
@@ -65,8 +66,19 @@ async def search_contacts(query: str, db: Session) -> list[Type[Contact]]:
 def get_upcoming_birthdays(db: Session):
     today = datetime.now()
     end_date = today + timedelta(days=7)
+
+    current_month = today.month
+    current_day = today.day
+
+    next_week_month = end_date.month
+    next_week_day = end_date.day
+
     return db.query(Contact).filter(
-        func.extract('month', Contact.birthday) == end_date.month,
-        func.extract('day', Contact.birthday) >= today.day,
-        func.extract('day', Contact.birthday) <= end_date.day
+        (
+                (func.extract('month', Contact.birthday) == current_month) &
+                (func.extract('day', Contact.birthday) >= current_day)
+        ) | (
+                (func.extract('month', Contact.birthday) == next_week_month) &
+                (func.extract('day', Contact.birthday) <= next_week_day)
+        )
     ).all()

@@ -1,5 +1,5 @@
-from datetime import datetime
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
+from datetime import date
 
 
 class ContactModel(BaseModel):
@@ -7,7 +7,7 @@ class ContactModel(BaseModel):
     last_name: str
     email: str
     phone: str = Field(max_length=10)
-    birthday: datetime
+    birthday: date
     description: str
 
 

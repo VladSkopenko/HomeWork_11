@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Path
 from sqlalchemy.orm import Session
 
 from src.database.db import get_db
@@ -43,9 +43,18 @@ async def delete_contact(contact_id: int, db: Session = Depends(get_db)):
     return contact
 
 
-@router.get("/{contact_id}", response_model=ContactModel)
-async def get_contacts_by_id(contact_id: int, db: Session = Depends(get_db)):
-    contact = await repository_contacts.get_contacts_by_id(contact_id, db)
+@router.get("/{id}")
+async def get_contact(
+        id: int = Path(description="id of the contact", gt=0),
+        db: Session = Depends(get_db),
+):
+    contact = await repository_contacts.get_contact(id, db)
+
+    if contact is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Contact is not found"
+        )
+
     return contact
 
 
