@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 Base = declarative_base()
 
@@ -14,6 +14,8 @@ class Contact(Base):
     phone = Column(String(10), nullable=True)
     birthday = Column(Date, nullable=False)
     description = Column(String(300), nullable=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user_id"), nullable=True)
+    user: Mapped["User"] = relationship("User", backref="contacts", lazy="joined")
 
 
 class User(Base):
