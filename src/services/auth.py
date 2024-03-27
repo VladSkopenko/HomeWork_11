@@ -73,7 +73,7 @@ class Auth:
         except JWTError as e:
             raise credentials_exception
 
-        user = 1
+        user = repository_users.get_user_by_email(email, db)
         if user is None:
             raise credentials_exception
         return user
