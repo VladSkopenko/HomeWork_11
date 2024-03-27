@@ -8,18 +8,18 @@ router = APIRouter(prefix='/auth', tags=["auth"])
 
 
 @router.post("/signup")
-async def signup(body: UserModel, db: Session = Depends(get_db())):
+async def signup(body: UserModel, db: Session = Depends(get_db)):
     pass
     return {}
 
 
 @router.post("/login")
-async def signup(body: UserModel, db: Session = Depends(get_db())):
+async def login(body: UserModel, db: Session = Depends(get_db)):
     pass
     return {}
 
 
 @router.post("/refresh_token")
-async def signup(body: UserModel, db: Session = Depends(get_db())):
+async def refresh_token(body: UserModel, db: Session = Depends(get_db)):
     pass
     return {}

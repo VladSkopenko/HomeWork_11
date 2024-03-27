@@ -62,5 +62,3 @@ async def get_contact(
 def get_upcoming_birthdays_list(db: Session = Depends(get_db)):
     return repository_contacts.get_upcoming_birthdays(db=db)
 
-
-on(status_code=500, detail="Error connecting to the database")
