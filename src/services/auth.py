@@ -22,7 +22,7 @@ class Auth:
     SECRET_KEY = "b77121a015a2399f6bde8eda4d771c3e"  # TODO прибрать в env файл
     ALGORITHM = "HS256"
 
-    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+    oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login") # Потрібен повний шлях , з мейна ауфа
 
     # define a function to generate a new access token
     async def create_access_token(data: dict, expires_delta: Optional[float] = None):
