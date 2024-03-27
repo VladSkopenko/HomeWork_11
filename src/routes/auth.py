@@ -19,7 +19,7 @@ async def login(body: UserModel, db: Session = Depends(get_db)):
     return {}
 
 
-@router.post("/refresh_token")
+@router.get("/refresh_token")
 async def refresh_token(body: UserModel, db: Session = Depends(get_db)):
     pass
     return {}
