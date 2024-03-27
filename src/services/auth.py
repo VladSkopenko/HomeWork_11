@@ -55,6 +55,25 @@ class Auth:
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate credentials')
 
+    async def get_current_user(self, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-    async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-        ...
+        try:
+            payload = jwt.decode(token, self.SECRET_KEY, algorithms=[self.ALGORITHM])
+            if payload['scope'] == 'access_token':
+                email = payload["sub"]
+                if email is None:
+                    raise credentials_exception
+            else:
+                raise credentials_exception
+        except JWTError as e:
+            raise credentials_exception
+
+        user = 1
+        if user is None:
+            raise credentials_exception
+        return user
