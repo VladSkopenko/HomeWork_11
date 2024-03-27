@@ -15,7 +15,7 @@ class Contact(Base):
     birthday = Column(Date, nullable=False)
     description = Column(String(300), nullable=True)
     created_at: Mapped[date] = mapped_column("created_at", DateTime, default=func.now(), nullable=True)
-    updated_at: Mapped[date] = mapped_column("updated_at", DateTime, default=func.now(), onupdate=func.now())
+    updated_at: Mapped[date] = mapped_column("updated_at", DateTime, default=func.now(), nullable=True, onupdate=func.now())
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     user: Mapped["User"] = relationship("User", backref="contacts", lazy="joined")
 
