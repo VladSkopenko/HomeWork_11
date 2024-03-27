@@ -77,3 +77,6 @@ class Auth:
         if user is None:
             raise credentials_exception
         return user
+
+
+auth_service = Auth()
